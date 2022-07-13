@@ -11,7 +11,7 @@ public class VerticalPandelonPainter extends Frame { // Розширяє або 
 //			 subclass			 superclass
 	public static void main(String[] args) throws Exception {
 		VerticalPandelonPainter PandelonPainter = new VerticalPandelonPainter("MyPandelon");
-		PandelonPainter.setSize(800, 700);
+		PandelonPainter.setSize(800, 900);
 		PandelonPainter.setVisible(true);
 		PandelonPainter.go();
 	}
@@ -29,10 +29,10 @@ public class VerticalPandelonPainter extends Frame { // Розширяє або 
 
 	// Vars for declaring
 	
-	int minDistance = 0;	//FromFoundationToHeavier
-	int maxDistance = 500;	//FromFoundationToHeavier
+	int minDistance = 10;	//From Foundation To Heavier
+	int maxDistance = 500;	//From Foundation To Heavier
 	
-	boolean isMovingUp = false;
+	boolean isMovingUp = true;
 	int animationShift = minDistance;
 
 	int xStart = 300, yStart = 100, foundationWidth = 70;
@@ -48,7 +48,7 @@ public class VerticalPandelonPainter extends Frame { // Розширяє або 
 		int w = getSize().width, h = getSize().height;
 		BufferedImage bi = (BufferedImage) createImage(w, h);
 		Graphics2D big = bi.createGraphics(); // 3
-		///////////
+		//! /////////
 		Line2D.Double fasten = new Line2D.Double(fastenX, yStart, fastenX, fastenYEnd + animationShift);
 		Rectangle heavier = new Rectangle (heavierX, fastenYEnd + animationShift, heavierWidth, heavierHeight);
 		//changing
@@ -58,15 +58,15 @@ public class VerticalPandelonPainter extends Frame { // Розширяє або 
 		big.draw(main);
 		//not changing
 		Line2D.Double foundation = new Line2D.Double(xStart, yStart, foundationX2, yStart);
+		g.setColor(Color.red);
+		Line2D.Double minDistanceBorder = new Line2D.Double(xStart + (foundationX2 - xStart) / 4, yStart + minDistance, foundationX2 - (foundationX2 - xStart) / 4, yStart + minDistance);
 		GeneralPath firstLine = new GeneralPath(foundation);
-		
+		firstLine.append(minDistanceBorder, false);
 		big.draw(firstLine);
-		////////////////////////////////////////
+		//! //////////////////////////////////////
 		g.drawImage(bi, 0, 0, this);
 	}
 	public void go() throws Exception{
-// //		minDistance += 30;		//початок координат не знаходиться у Фреймі
-// //		maxDistance += 30;
 		
 		while(true) {
 			if(isMovingUp) {
