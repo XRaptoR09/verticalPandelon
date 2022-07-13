@@ -30,7 +30,7 @@ public class VerticalPandelonPainter extends Frame { // Розширяє або 
 	// Vars for declaring
 	
 	int minDistance = 10;	//From Foundation To Heavier
-	int maxDistance = 500;	//From Foundation To Heavier
+	int maxDistance = 200;	//From Foundation To Heavier
 	
 	boolean isMovingUp = true;
 	int animationShift = minDistance;
@@ -38,10 +38,14 @@ public class VerticalPandelonPainter extends Frame { // Розширяє або 
 	int xStart = 300, yStart = 100, foundationWidth = 70;
 	int foundationX2 = foundationWidth + xStart;
 	int heavierWidth = 30, heavierHeight = 100;
-	// *Counting variables
-	int fastenX = xStart + (foundationWidth / 2), fastenYEnd = yStart,
 
-			heavierX = fastenX - (heavierWidth / 2);
+	Color upColor = Color.green.darker();
+	Color downColor = Color.red;
+	// *Counting variables
+	Color heavierColor = Color.red;
+	Color normal = Color.black;
+	int fastenX = xStart + (foundationWidth / 2), fastenYEnd = yStart,
+	heavierX = fastenX - (heavierWidth / 2);
 
 	public void update(Graphics g) {
 		// public void paint(Graphics g) {
@@ -52,17 +56,22 @@ public class VerticalPandelonPainter extends Frame { // Розширяє або 
 		Line2D.Double fasten = new Line2D.Double(fastenX, yStart, fastenX, fastenYEnd + animationShift);
 		Rectangle heavier = new Rectangle (heavierX, fastenYEnd + animationShift, heavierWidth, heavierHeight);
 		//changing
-		GeneralPath main = new GeneralPath(fasten);
-		main.append(heavier, false);
+
+		big.setColor(heavierColor);
+		big.fill(heavier);
 		
-		big.draw(main);
+		big.setColor(normal);
+		big.draw(fasten);
 		//not changing
 		Line2D.Double foundation = new Line2D.Double(xStart, yStart, foundationX2, yStart);
-		g.setColor(Color.red);
 		Line2D.Double minDistanceBorder = new Line2D.Double(xStart + (foundationX2 - xStart) / 4, yStart + minDistance, foundationX2 - (foundationX2 - xStart) / 4, yStart + minDistance);
-		GeneralPath firstLine = new GeneralPath(foundation);
-		firstLine.append(minDistanceBorder, false);
-		big.draw(firstLine);
+		Rectangle maxDistanceBorder = new Rectangle(xStart - (foundationX2 - xStart) / 4, yStart + maxDistance + heavierHeight, 100, 10);
+		
+		big.draw(foundation);
+		big.setColor(downColor);
+		big.draw(minDistanceBorder);
+		big.setColor(upColor);
+		big.fill(maxDistanceBorder);
 		//! //////////////////////////////////////
 		g.drawImage(bi, 0, 0, this);
 	}
@@ -70,16 +79,18 @@ public class VerticalPandelonPainter extends Frame { // Розширяє або 
 		
 		while(true) {
 			if(isMovingUp) {
+				heavierColor = upColor;
 				while (animationShift > minDistance) {
 					repaint();                    
-					Thread.sleep(5);
+					Thread.sleep(8);
 					animationShift--;
 				}
 				isMovingUp = false;
 			}else {
+				heavierColor = downColor;
 				while (animationShift < maxDistance) {
 					repaint();                    
-					Thread.sleep(3);
+					Thread.sleep(6);
 					animationShift++;
 				}
 				isMovingUp = true;
